@@ -7,33 +7,29 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp3
 {
-    class Solver
+    public class Arithmatic
     {
-
+        
         public string Solve(string input)
         {
-
             //Loop through to find parenthasis
 
             string pattern = @"\([\d\+\-\*\^\\]+\)";
 
             RegexOptions options = RegexOptions.None;
 
-            Console.WriteLine("\nSolving:" + input);
-
             while(Regex.IsMatch(input, pattern, options))
             {
                 input = Regex.Replace(input, pattern, (m) => {
 
-                    return Calculate(m.Value);
+                    return CalculateInPars(m.Value);
                 });
             }
 
-            Console.WriteLine(input);
             return input;
         }
 
-        string Calculate(string input)
+        string CalculateInPars(string input)
         {
             string pattern = @"[\d\+\-\*\^\\]+";
             RegexOptions options = RegexOptions.None;
@@ -42,10 +38,11 @@ namespace ConsoleApp3
 
             string result = CalculateInside(inside);
 
-            
-
             return result ;
         }
+
+
+
         string CalculateInside(string inside)
         {
 
@@ -143,6 +140,11 @@ namespace ConsoleApp3
             }
 
             return inside;
+        }
+
+        void Operate()
+        {
+
         }
     }
 }

@@ -1,0 +1,70 @@
+﻿
+Overview:
+Step 1:
+	User enters an equation as a string
+
+Step 2:
+	Determine the type of equation (poly, fration, etc)
+
+Step 3:
+	Solve, return an object that describes the information of each step of the math solution
+
+
+How to store equation:
+	String is simple and easy. Using objects can be complicated, but with little gain.
+
+How to parse:
+	Regex
+
+How to determine type of equation:
+	Reqex seems to be the most reliable and simple
+
+How to solve:
+	Rearange equation to simpliest form
+	Use math formulas to solve
+	
+
+
+
+
+
+It might be best to keep the equation stored as a string, and use other classes to create objects from parseing the string.
+
+How to organize group of classes that parse the equation into objects?
+
+	Once type for everything
+	One type for each kind of math topic (polynomial, i, fractions, etc)
+
+
+
+
+Convert Polynomial to standard form
+
+Solve polynomial in Standard Form
+
+    Linear
+        ax + b = 0
+            x=-b/a
+
+    Quad
+        ax2+bx+c=0
+            x=-b+-sqrt((b2-4ac)/2a)
+
+Unfiltered Input String. Should be able to handle most flexible cases
+Convert input string to usable types
+-Find type of equation
+	Poly to the nth degree 2x+1=0
+	logs
+	i
+	boolean T&F|F
+	...
+
+		Next steps are handled in subclasses(Polynomial, Boolean, Log, etc)
+			reduce to simpliest form
+			find if possible to solve
+			Solve
+
+Equation
+
+
+

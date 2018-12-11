@@ -10,8 +10,8 @@ namespace ConsoleApp3
     {
         static void Main(string[] args)
         {
-
-            Solver solver = new Solver();
+            /*
+            Arithmatic solver = new Arithmatic();
             string[] strsAdd = {
                 "(1+1)",
                 "(1+1+1)",
@@ -50,12 +50,18 @@ namespace ConsoleApp3
 
             };
 
-            foreach (string s in strsCombine)
+            foreach (string s in strsAdd)
             {
                 
                 solver.Solve(s);
             }
 
+            */
+
+            /*
+            PolynomialSolver p = new PolynomialSolver();
+            Console.WriteLine(p.ConvertToStandardForm("2+x^2"));
+            */
             Console.ReadKey();
         }
     }
