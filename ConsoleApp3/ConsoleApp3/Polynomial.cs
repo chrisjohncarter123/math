@@ -67,17 +67,17 @@ namespace ConsoleApp3
 
         }
         */
-        public string OrderByPower(string input)
+        public string OrderByPower()
         {
             string pattern = @"[\+\-]?((?<coef>[0-9]+)((?<variable>[a-z]+))(\^((?<power>[0-9]))))";
 
             RegexOptions options = RegexOptions.None;
 
-            MatchCollection matches = Regex.Matches(input, pattern, options);
+            MatchCollection matches = Regex.Matches(AsString, pattern, options);
 
             IEnumerable<Match> query = matches.Cast<Match>().OrderByDescending(match =>
             {
-                //check if power is 0 or 1, in shorthand notation
+                //check if power is 0 or 1, in shorthand notation (x^1 as x, or 4x^0 as 4)
 
                 int power = int.Parse(match.Groups["power"].Value);
 

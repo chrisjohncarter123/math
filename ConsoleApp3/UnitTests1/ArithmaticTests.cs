@@ -12,75 +12,74 @@ namespace UnitTests1
     public class ArithmaticTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void ArithmaticTestsMethod1()
         {
-            Arithmatic solver = new Arithmatic();
+            Arithmatic solver = new Arithmatic("(1+1)");
 
-            string result = solver.Solve("(1+1)");
+            string result = solver.Solve();
 
             Assert.AreEqual(result, "2");
            
         }
 
         [TestMethod]
-        public void TestMethod2()
+        public void ArithmaticTestsMethod2()
         {
-            Arithmatic solver = new Arithmatic();
+            Arithmatic solver = new Arithmatic("(1+2)");
 
-            string result = solver.Solve("(1+2)");
+            string result = solver.Solve();
 
             Assert.AreEqual(result, "3");
 
         }
 
         [TestMethod]
-        public void TestMethod3()
+        public void ArithmaticTestsMethod3()
         {
-            Arithmatic solver = new Arithmatic();
+            Arithmatic solver = new Arithmatic("(2*2)");
 
-            string result = solver.Solve("(2*2)");
+            string result = solver.Solve();
 
             Assert.AreEqual(result, "4");
 
         }
 
         [TestMethod]
-        public void TestMethod4()
+        public void ArithmaticTestsMethod4()
         {
-            Arithmatic solver = new Arithmatic();
+            Arithmatic solver = new Arithmatic("((2*2)+1)");
 
-            string result = solver.Solve("((2*2)+1)");
+            string result = solver.Solve();
 
             Assert.AreEqual(result, "5");
 
         }
 
         [TestMethod]
-        public void TestMethod5()
+        public void ArithmaticTestsMethod5()
         {
-            Arithmatic solver = new Arithmatic();
+            Arithmatic solver = new Arithmatic("((1+1)+((1+1)+(1+1)))");
 
-            string result = solver.Solve("((1+1)+((1+1)+(1+1)))");
+            string result = solver.Solve();
 
             Assert.AreEqual(result, "6");
 
         }
 
         [TestMethod]
-        public void TestMethod6()
+        public void ArithmaticTestsMethod6()
         {
-            Arithmatic solver = new Arithmatic();
+            Arithmatic solver = new Arithmatic("(3+2*(1+1))");
 
-            string result = solver.Solve("(3+2*(1+1))");
+            string result = solver.Solve();
 
             Assert.AreEqual(result, "7");
 
-            Assert.AreEqual(solver.Solve("(1+1)"), "2");
-
         }
 
+        /*
         [TestMethod]
-        public void TestMethod7()
+        public void ArithmaticTestsMethod7()
         {
             Arithmatic solver = new Arithmatic();
             string[] strsAdd = {
@@ -129,6 +128,7 @@ namespace UnitTests1
             }
 
         }
+        */
 
     }
 }

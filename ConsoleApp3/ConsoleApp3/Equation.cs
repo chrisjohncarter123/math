@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 /// <summary>
 /// Represents any type of equation in the form f=g
@@ -10,13 +11,15 @@ using System.Threading.Tasks;
 /// </summary>
 namespace ConsoleApp3
 {
-    public abstract class Equation
+    public class Equation
     {
 
         public string AsString { get; set; }
 
-        public Equation(string value)
+        public Equation(string value) 
         {
+            
+
             AsString = value;
         }
 
@@ -24,36 +27,32 @@ namespace ConsoleApp3
 
         public string GetEquationSide(EquationSide side)
         {
-            string pattern;
+            string pattern = @"(?<left>.+)=(?<right>.+)";
 
-            string result = "";
+            Match m = Regex.Match(AsString, pattern);
 
-            /*
-             * Use regex to find left and right sides of equals side
-             * */
-            if(side == EquationSide.Right)
+            if(side == EquationSide.Left)
             {
-
+                return m.Groups["left"].Value;
             }
             else
             {
-
+                return m.Groups["right"].Value;
             }
 
-            
-
-            return result;
         }
 
-        public string AddToBothSides(Term term)
+        public void AddToBothSides(Term term)
         {
             string left = GetEquationSide(EquationSide.Left);
             string right = GetEquationSide(EquationSide.Right);
 
-            left += term.ToString();
-            right += term.ToString();
+            /*
+            left += "+" + term.ToString();
+            right += "+" + term.ToString();
+            */
 
-            return string.Format("{0}={1}",left,right);
+            AsString = string.Format("{0}={1}",left,right);
         }
         public void MultToBothSides(string term)
         {

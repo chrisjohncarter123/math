@@ -49,8 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArithmaticTests.cs" />
+    <Compile Include="EquationTests.cs" />
     <Compile Include="PolynomialSolverTests.cs" />
+    <Compile Include="PolynomialTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TermTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

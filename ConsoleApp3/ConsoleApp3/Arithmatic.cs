@@ -7,12 +7,19 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp3
 {
-    public class Arithmatic
+    public class Arithmatic : Equation
     {
         
-        public string Solve(string input)
+        public Arithmatic(string input) : base(input)
+        {
+
+        }
+
+        public string Solve()
         {
             //Loop through to find parenthasis
+
+            string input = AsString;
 
             string pattern = @"\([\d\+\-\*\^\\]+\)";
 

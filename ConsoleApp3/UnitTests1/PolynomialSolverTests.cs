@@ -11,6 +11,8 @@ namespace ConsoleApp3.Tests
     [TestClass()]
     public class PolynomialSolverTests
     {
+
+
         /*
         [TestMethod()]
         public void ConvertToStandardFormTest()

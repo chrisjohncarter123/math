@@ -15,7 +15,9 @@ namespace ConsoleApp3
         public const string Pattern = @"[\+\-]?((?<coef>[0-9]+)((?<variable>[a-z]+))(\^((?<power>[0-9]))))";
         public Term()
         {
-
+            Coef = 0;
+            VariableSymbol = ' ';
+            Power = 0;
         }
         public Term(int coef, char variableSymbol, int power)
         {
@@ -54,6 +56,20 @@ namespace ConsoleApp3
         {
             return string.Format("{0}{1}^{2}", Coef, VariableSymbol, Power);
         }
-        
+        public int Sign()
+        {
+            if(Coef > 0)
+            {
+                return 1;
+            }
+            else if (Coef < 0)
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }
