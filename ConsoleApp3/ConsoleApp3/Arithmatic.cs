@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ConsoleApp3
+namespace Math
 {
     public class Arithmatic : Equation
     {
@@ -70,7 +70,7 @@ namespace ConsoleApp3
                     switch (operation)
                     {
                         case "^":
-                            resultInt = (int)Math.Pow(firstInt, seccondInt);
+                            resultInt = (int)System.Math.Pow(firstInt, seccondInt);
                             break;
                     }
 

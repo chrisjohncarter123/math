@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConsoleApp3;
+using Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp3.Tests
+namespace Math.Tests
 {
     [TestClass()]
     public class PolynomialTests
@@ -94,6 +94,22 @@ namespace ConsoleApp3.Tests
         }
 
         [TestMethod()]
+        public void OrderTermsByPowerTest2()
+        {
+            List<Term> terms = new List<Term>();
+            terms.Add(new Term(2, 'a', 1));
+            terms.Add(new Term(1, 'a', 2));
+            terms.Add(new Term(3, 3));
+
+            List<Term> result = Polynomial.OrderTermsByPower(terms);
+
+            Assert.AreEqual(3, result.Count, "Failed Count");
+            Assert.AreEqual(3, result[0].Power, "Failed First Term");
+            Assert.AreEqual(2, result[1].Power, "Failed Seccond Term");
+            Assert.AreEqual(1, result[2].Power, "Failed Third Term");
+        }
+
+        [TestMethod()]
         public void TermListToEquationTest()
         {
             List<Term> terms = new List<Term>();
@@ -116,6 +132,24 @@ namespace ConsoleApp3.Tests
             double result = p.SolveLinearForX();
 
             Assert.AreEqual(-.5, result);
+        }
+        [TestMethod()]
+        public void SolveLinearForXTest2()
+        {
+            Polynomial p = new Polynomial("10x+10=0");
+
+            double result = p.SolveLinearForX();
+
+            Assert.AreEqual(-1, result);
+        }
+        [TestMethod()]
+        public void SolveLinearForXTest3()
+        {
+            Polynomial p = new Polynomial("4+2x=0");
+
+            double result = p.SolveLinearForX();
+
+            Assert.AreEqual(-2, result);
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConsoleApp3;
+using Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp3.Tests
+namespace Math.Tests
 {
     [TestClass()]
     public class EquationTests
@@ -148,11 +148,16 @@ namespace ConsoleApp3.Tests
 
             List<Term> terms = poly.Terms(EquationSide.Left);
 
+
             Assert.AreEqual(2, terms.Count, "Count failed");
+
             Assert.AreEqual(2, terms[0].Coef, "Coef of 2x^2 failed");
             Assert.AreEqual('x', terms[0].VariableSymbol, "Variable Symbol of 2x^2 failed");
             Assert.AreEqual(3, terms[0].Power, "Power of 2x^2 failed");
+
             Assert.AreEqual(1, terms[1].Coef, "Coef of 1 failed");
+            Assert.AreEqual(Term.DefaultVariableSymbol, terms[1].VariableSymbol, "VariableSymbol of 1 failed");
+            Assert.AreEqual(Term.DefaultPower, terms[1].Power, "Power of 1 failed");
         }
 
         

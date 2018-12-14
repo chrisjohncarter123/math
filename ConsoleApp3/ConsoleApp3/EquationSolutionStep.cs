@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Math
 {
-    public enum EquationSide
+    public class EquationSolutionStep
     {
-        Left,
-        Right   
+        public string Equation { get; set; }
+        public string Description { get; set; }
+
     }
 }

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EquationSolutionStep.cs" />
     <Compile Include="Term.cs" />
     <Content Include="Notes.txt" />
     <Compile Include="Equation.cs" />

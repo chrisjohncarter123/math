@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ConsoleApp3
+namespace Math
 {
     public class Term
     {
@@ -16,7 +16,7 @@ namespace ConsoleApp3
         public const string Pattern = @"[+-]?(?<coef>\d+(?:\.\d+)?)?(?<variable>(?(coef)(([a-z]))?|[a-z]))(?:\^(?<power>\d+))?";
         public const int DefaultCoef = 1;
         public const char DefaultVariableSymbol = ' ';
-        public const int DefaultPower = 1;
+        public const int DefaultPower = 0;
         public Term()
         {
             Coef = DefaultCoef;

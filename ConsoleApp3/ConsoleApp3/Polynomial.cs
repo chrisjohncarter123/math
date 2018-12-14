@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ConsoleApp3
+namespace Math
 {
     public class Polynomial : Equation
     {
@@ -48,8 +48,8 @@ namespace ConsoleApp3
 
         public static List<Term> OrderTermsByPower(List<Term> terms)
         {
-            terms.OrderByDescending(t => t.Power);
-            return terms;
+            return terms.OrderByDescending(t => t.Power).ToList();
+            
         }
         public static Equation TermListToEquation(List<Term> terms)
         {
@@ -99,14 +99,63 @@ namespace ConsoleApp3
 
         }
         */
+
+        public List<Term> GetTermsOfPower(List<Term> terms, int power)
+        {
+            List<Term> result = new List<Term>();
+
+            foreach(Term t in terms)
+            {
+                if(t.Power == power)
+                {
+                    result.Add(t);
+                }
+            }
+
+            return result;
+        }
+
+        public Term AddTermsOfPower(List<Term> terms, char var, int power)
+        {
+            int coef = 0;
+
+            var query = from t in terms
+                        where t.Power == power
+                        where t.VariableSymbol == var
+                        select t;
+                        
+            foreach(Term t in query)
+            {
+                coef += t.Coef;
+            }
+
+            Term result = new Term(coef, var, power);
+            return result;
+        }
+        public void AddAllTermsOfPower(List<Term> terms)
+        {
+
+        }
+
+
         public double SolveLinearForX()
         {
 
             if(GetDegree() == 1)
             {
+                
                 List<Term> terms = Terms(EquationSide.Left);
+                
+                foreach (Term t in terms)
+                {
+                    Console.WriteLine(t);
+                }
                 terms = OrderTermsByPower(terms);
-
+                Console.WriteLine("---------------------");
+                foreach(Term t in terms)
+                {
+                    Console.WriteLine(t);
+                }
                 //ax+b=0
                 //x=-b/a
                 double a, b, x;
@@ -140,7 +189,7 @@ namespace ConsoleApp3
                     inner = 0;
                 }
 
-                double top = Math.Sqrt((b*b)-(4*a*c));
+                double top = System.Math.Sqrt((b * b) -(4* a * c));
 
                 x1 = (-b + top) / (2 * a);
                 x2 = (-b - top) / (2 * a);
@@ -151,6 +200,25 @@ namespace ConsoleApp3
             {
                 return 0;
             }
+        }
+
+
+        public EquationSolutionInformation Solve()
+        {
+            EquationSolutionInformation sol = new EquationSolutionInformation();
+
+            int degree = GetDegree();
+
+            if(degree == 2)
+            {
+                SolveQuadForX();
+            }
+            else if(degree == 1)
+            {
+                SolveLinearForX();
+            }
+
+            return sol;
         }
     }
 

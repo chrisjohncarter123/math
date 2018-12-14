@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 /// Provides properties for easy access to the equation in different ways
 /// Does not handle solving the equation. That is done in classes that inherit from Solver
 /// </summary>
-namespace ConsoleApp3
+namespace Math
 {
     public class Equation
     {

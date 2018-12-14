@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConsoleApp3;
+using Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace ConsoleApp3.Tests
+namespace Math.Tests
 {
     [TestClass()]
     public class TermTests
@@ -17,9 +17,9 @@ namespace ConsoleApp3.Tests
         {
             Term t = new Term();
 
-            Assert.AreEqual(t.Coef, 0, "Coef failed");
-            Assert.AreEqual(t.VariableSymbol, ' ', "VariableSymbol failed");
-            Assert.AreEqual(t.Power, 0, "Power failed");
+            Assert.AreEqual(t.Coef, Term.DefaultCoef, "Coef failed");
+            Assert.AreEqual(t.VariableSymbol, Term.DefaultVariableSymbol, "VariableSymbol failed");
+            Assert.AreEqual(t.Power, Term.DefaultPower, "Power failed");
         }
 
         [TestMethod()]
