@@ -15,29 +15,7 @@ namespace ConsoleApp3
             
         }
 
-        private List<Term> Terms(EquationSide side)
-        {
-            MatchCollection matches = TermMatchCollection(side);
-
-            List<Term> terms = new List<Term>();
-
-            foreach (Match m in matches)
-            {
-                terms.Add(new Term(m));
-            }
-
-            return terms;
-        }
-        private MatchCollection TermMatchCollection(EquationSide side)
-        {
-            string pattern = Term.Pattern;
-
-            string equation = GetEquationSide(side);
-
-            MatchCollection matches = Regex.Matches(equation, pattern, RegexOptions.None);
-
-            return matches;
-        }
+        
         public bool IsInStandardLinearForm()
         {
             string pattern = @"^\d*x([+-]\d+)?=0$";
@@ -67,35 +45,23 @@ namespace ConsoleApp3
 
         }
         */
-        public string OrderByPower()
+
+        public static List<Term> OrderTermsByPower(List<Term> terms)
         {
-            string pattern = @"[\+\-]?((?<coef>[0-9]+)((?<variable>[a-z]+))(\^((?<power>[0-9]))))";
-
-            RegexOptions options = RegexOptions.None;
-
-            MatchCollection matches = Regex.Matches(AsString, pattern, options);
-
-            IEnumerable<Match> query = matches.Cast<Match>().OrderByDescending(match =>
-            {
-                //check if power is 0 or 1, in shorthand notation (x^1 as x, or 4x^0 as 4)
-
-                int power = int.Parse(match.Groups["power"].Value);
-
-                return power;
-
-            });
-
-            string output = "";
-
-            foreach (Match m in query)
-            {
-                output += m.Value;
-                Console.WriteLine(m);
-            }
-
-            return output;
+            terms.OrderByDescending(t => t.Power);
+            return terms;
         }
-
+        public static Equation TermListToEquation(List<Term> terms)
+        {
+            Equation e = new Equation("0=0");
+            foreach(Term t in terms)
+            {
+                e.AddTermToOneSide(EquationSide.Left, t);
+            }
+            return e;
+        }
+       
+        /*
         public string AddTerms(string input)
         {
             //expecting input to be already in correct order
@@ -132,16 +98,59 @@ namespace ConsoleApp3
             return result;
 
         }
-        public string SolveLinear(string input)
+        */
+        public double SolveLinearForX()
         {
-            string pattern = @"^(?<coef>\d+)x[\+\-](?<const>\d+)$";
-            Match m = Regex.Match(input, pattern);
-            double varValue = (-double.Parse(m.Groups["const"].Value)) / double.Parse(m.Groups["coef"].Value);
-            return varValue.ToString();
+
+            if(GetDegree() == 1)
+            {
+                List<Term> terms = Terms(EquationSide.Left);
+                terms = OrderTermsByPower(terms);
+
+                //ax+b=0
+                //x=-b/a
+                double a, b, x;
+                a = terms[0].Coef;
+                b = terms[1].Coef;
+                x = (-b) / a;
+                return x;
+            }
+            else
+            {
+                return 0;
+            }  
         }
-        public string SolveQuad(string input)
+        public double SolveQuadForX()
         {
-            return "";
+            if (GetDegree() == 2)
+            {
+                List<Term> terms = Terms(EquationSide.Left);
+                terms = OrderTermsByPower(terms);
+
+                //ax^2+bx+c=0
+                //x=(b+-(sqrt(b^2-4*a*c))/(2*a)
+                double a, b, c, x1, x2;
+                a = terms[0].Coef;
+                b = terms[1].Coef;
+                c = terms[2].Coef;
+
+                double inner = (b * b) - (4 * a * c);
+                if(inner < 0)
+                {
+                    inner = 0;
+                }
+
+                double top = Math.Sqrt((b*b)-(4*a*c));
+
+                x1 = (-b + top) / (2 * a);
+                x2 = (-b - top) / (2 * a);
+
+                return x1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 

@@ -78,13 +78,44 @@ namespace ConsoleApp3.Tests
         }
 
         [TestMethod()]
-        public void OrderByPowerTest()
+        public void OrderTermsByPowerTest()
         {
-            Polynomial polynomial = new Polynomial("2x+5x^4+1x^2");
+            List<Term> terms = new List<Term>();
+            terms.Add(new Term(2, 'a', 4));
+            terms.Add(new Term(1, 'a', 2));
+            terms.Add(new Term(3, 2));
 
-            string result = polynomial.OrderByPower();
+            List<Term> result = Polynomial.OrderTermsByPower(terms);
 
-            Assert.AreEqual("5x^4+1x^2+2x", result);
+            Assert.AreEqual(3, result.Count, "Failed Count");
+            Assert.AreEqual(4, result[0].Power, "Failed First Term");
+            Assert.AreEqual(2, result[1].Power, "Failed Seccond Term");
+            Assert.AreEqual(2, result[2].Power, "Failed Third Term");
+        }
+
+        [TestMethod()]
+        public void TermListToEquationTest()
+        {
+            List<Term> terms = new List<Term>();
+            terms.Add(new Term(2, 'a', 4));
+            terms.Add(new Term(1, 'a', 2));
+            terms.Add(new Term(3, 2));
+
+            Equation result = Polynomial.TermListToEquation(terms);
+            Equation expected = new Equation("2a^4+1a^2+3^2=0");
+
+            Assert.AreEqual(expected.AsString, result.AsString);
+
+        }
+
+        [TestMethod()]
+        public void SolveLinearForXTest()
+        {
+            Polynomial p = new Polynomial("2x+1=0");
+
+            double result = p.SolveLinearForX();
+
+            Assert.AreEqual(-.5, result);
         }
     }
 }

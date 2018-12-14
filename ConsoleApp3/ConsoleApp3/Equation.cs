@@ -41,29 +41,125 @@ namespace ConsoleApp3
             }
 
         }
-
-        public void AddToBothSides(Term term)
+        public void AddTermToOneSide(EquationSide side, Term term)
         {
+            string sideStr = GetEquationSide(side);
+
+            string result = sideStr;
+
+            if (sideStr != "0")
+            {
+                result += "+";
+            }
+            else
+            {
+                result = "";
+            }
+
+            result += term.ToString();
+
+
+            string left, right;
+            if(side == EquationSide.Left)
+            {
+                left = result;
+                right = GetEquationSide(EquationSide.Right);
+            }
+            else
+            {
+                left = GetEquationSide(EquationSide.Left);
+                right = result;
+            }
+
+            AsString = string.Format("{0}={1}", left, right);
+        }
+        public void AddTermToBothSides(Term term)
+        {
+            AddTermToOneSide(EquationSide.Left, term);
+            AddTermToOneSide(EquationSide.Right, term);
+
+            /*
             string left = GetEquationSide(EquationSide.Left);
             string right = GetEquationSide(EquationSide.Right);
 
-            /*
-            left += "+" + term.ToString();
-            right += "+" + term.ToString();
-            */
+            string leftResult = left;
+            string rightResult = right;
 
-            AsString = string.Format("{0}={1}",left,right);
-        }
-        public void MultToBothSides(string term)
-        {
+            if(left != "0")
+            {
+                leftResult += "+";
+            }
+            else
+            {
+                leftResult = "";
+            }
+            if(right != "0")
+            {
+                rightResult += "+";
+            }
+            else
+            {
+                rightResult = "";
+            }
+
+            leftResult += term.ToString();
+            rightResult += term.ToString();
             
 
-
+            AsString = string.Format("{0}={1}",leftResult,rightResult);
+            */
         }
-        public void DivToBothSides(string term)
+        public void MultTermToBothSidesWithPars(Term term)
         {
+            AsString = string.Format("({0})*({2})=({1})*({2})",
+               GetEquationSide(EquationSide.Left),
+               GetEquationSide(EquationSide.Right),
+               term.ToString());
+
 
         }
+        public void DivTermToBothSidesWithPars(Term term)
+        {
+            AsString = string.Format("({0})/({2})=({1})/({2})",
+                GetEquationSide(EquationSide.Left),
+                GetEquationSide(EquationSide.Right),
+                term.ToString());
+        }
+
+        public void RemoveExtraParsAroundTerms()
+        {
+            string pattern = string.Format(@"\((?<inner>{0})\)", Term.Pattern); 
+             //string.Format(@"\((?<inner>[+-]?(?<coef>\d+(?:\.\d+)?)?(?<variable>(?(coef)(([a-z]))?|[a-z]))(?:\^(?<power>\d+))?)\)", Term.Pattern);
+
+            MatchCollection matches = Regex.Matches(AsString, pattern);
+            
+            while (Regex.IsMatch(AsString, pattern))
+            {
+                AsString = Regex.Replace(AsString, pattern, (m) => {
+
+                    return m.Groups["inner"].Value;
+                });
+            }
+        }
+
+        public List<Term> Terms(EquationSide side)
+        {
+            string pattern = Term.Pattern;
+
+            string equation = GetEquationSide(side);
+
+            MatchCollection matches = Regex.Matches(equation, pattern, RegexOptions.None);
+
+            List<Term> terms = new List<Term>();
+
+            foreach (Match m in matches)
+            {
+                terms.Add(new Term(m));
+            }
+
+            return terms;
+        }
+
 
     }
 
