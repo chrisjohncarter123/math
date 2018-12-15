@@ -60,6 +60,17 @@ namespace Math.Tests
             Assert.AreEqual("2x=1+2y^2", e.AsString);
         }
 
+        [TestMethod()]
+        public void AddTermToOneSideTest3()
+        {
+            Equation e = new Equation("2x=1");
+            Term t = new Term("-2y^2");
+
+            e.AddTermToOneSide(EquationSide.Right, t);
+
+            Assert.AreEqual("2x=1-2y^2", e.AsString);
+        }
+
 
         [TestMethod()]
         public void AddToBothSidesTest()
@@ -160,6 +171,43 @@ namespace Math.Tests
             Assert.AreEqual(Term.DefaultPower, terms[1].Power, "Power of 1 failed");
         }
 
-        
+        [TestMethod()]
+        public void TermsTest2()
+        {
+            Polynomial poly = new Polynomial("2x+1=0");
+
+            List<Term> terms = poly.Terms(EquationSide.Left);
+
+
+            Assert.AreEqual(2, terms.Count, "Count failed");
+
+            Assert.AreEqual(2, terms[0].Coef, "Coef of 2x^2 failed");
+            Assert.AreEqual('x', terms[0].VariableSymbol, "Variable Symbol of 2x^2 failed");
+            Assert.AreEqual(1, terms[0].Power, "Power of 2x failed");
+
+            Assert.AreEqual(1, terms[1].Coef, "Coef of 1 failed");
+            Assert.AreEqual(Term.DefaultVariableSymbol, terms[1].VariableSymbol, "VariableSymbol of 1 failed");
+            Assert.AreEqual(Term.DefaultPower, terms[1].Power, "Power of 1 failed");
+        }
+
+        [TestMethod()]
+        public void RemoveExtraZerosTest()
+        {
+            Equation equation = new Equation("32+0-4+0=0");
+
+            equation.RemoveExtraZeros();
+
+            Assert.AreEqual("32-4=0", equation.AsString);
+        }
+
+        [TestMethod()]
+        public void RemoveExtraZeroValuedCoefTermsTest()
+        {
+            Equation equation = new Equation("32+0x-0x^2+4=0");
+
+            equation.RemoveExtraZeroValuedCoefTerms();
+
+            Assert.AreEqual("32+4=0", equation.AsString);
+        }
     }
 }

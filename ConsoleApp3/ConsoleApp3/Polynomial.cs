@@ -14,8 +14,15 @@ namespace Math
         {
             
         }
-
-        
+        public Polynomial(List<Term> left) : base()
+        {
+            AsString = "0=0";
+            foreach(Term t in left)
+            {
+                AddTermToOneSide(EquationSide.Left, t);
+            }
+            
+        }
         public bool IsInStandardLinearForm()
         {
             string pattern = @"^\d*x([+-]\d+)?=0$";
@@ -99,7 +106,7 @@ namespace Math
 
         }
         */
-
+        /*
         public List<Term> GetTermsOfPower(List<Term> terms, int power)
         {
             List<Term> result = new List<Term>();
@@ -114,10 +121,12 @@ namespace Math
 
             return result;
         }
-
-        public Term AddTermsOfPower(List<Term> terms, char var, int power)
+        */
+        public Term AddTermsOfPower(EquationSide side, char var, int power)
         {
             int coef = 0;
+
+            List<Term> terms = Terms(side);
 
             var query = from t in terms
                         where t.Power == power
@@ -132,11 +141,38 @@ namespace Math
             Term result = new Term(coef, var, power);
             return result;
         }
-        public void AddAllTermsOfPower(List<Term> terms)
+        
+        public List<Term> AddAllLikeTerms(EquationSide side)
         {
+            List<Term> result = new List<Term>();
+            List<Term> terms = Terms(side);
+            Dictionary<TermType, int> termCoefs = new Dictionary<TermType, int>();
 
+            foreach (Term t in terms)
+            {
+                int value;
+                TermType type = new TermType(t.Power, t.VariableSymbol);
+                if(termCoefs.TryGetValue(type, out value))
+                {
+                    termCoefs[type] += t.Coef;
+                }
+                else
+                {
+                    termCoefs.Add(type, t.Coef);
+                }
+            }
+
+            for(int i = 0; i < termCoefs.Count; i++)
+            {
+                TermType type = termCoefs.Keys.ToList()[i];
+                int coef = termCoefs[type];
+
+                result.Add(new Term(coef, type.VariableSymbol, type.Power));
+            }
+
+            return result;
         }
-
+        
 
         public double SolveLinearForX()
         {
@@ -169,6 +205,7 @@ namespace Math
                 return 0;
             }  
         }
+        
         public double SolveQuadForX()
         {
             if (GetDegree() == 2)
@@ -202,25 +239,38 @@ namespace Math
             }
         }
 
-
-        public EquationSolutionInformation Solve()
+        
+        public Equation Simplify()
         {
-            EquationSolutionInformation sol = new EquationSolutionInformation();
+            string left = GetEquationSide(EquationSide.Left);
+            string right = GetEquationSide(EquationSide.Right);
 
-            int degree = GetDegree();
+            List<Term> rightTerms = Terms(EquationSide.Right);
 
-            if(degree == 2)
+            foreach(Term t in rightTerms)
             {
-                SolveQuadForX();
-            }
-            else if(degree == 1)
-            {
-                SolveLinearForX();
+                Term minusT = new Term(-t.Coef, t.VariableSymbol, t.Power);
+                AddTermToBothSides(t);
             }
 
-            return sol;
+            List<Term> leftTerms = AddAllLikeTerms(EquationSide.Left);
+            leftTerms = OrderTermsByPower(leftTerms);
+
+            Polynomial e = new Polynomial(leftTerms);
+
+            return new Equation(e.AsString);
+        }
+        
+    }
+    struct TermType
+    {
+        public int Power { get; set; }
+        public char VariableSymbol { get; set; }
+        public TermType(int power, char var)
+        {
+            Power = power;
+            VariableSymbol = var;
         }
     }
-
     
 }

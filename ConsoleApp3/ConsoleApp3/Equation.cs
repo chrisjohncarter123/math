@@ -16,6 +16,10 @@ namespace Math
 
         public string AsString { get; set; }
 
+        public Equation()
+        {
+
+        }
         public Equation(string value) 
         {
             
@@ -24,7 +28,22 @@ namespace Math
         }
 
         
+        public void RemoveExtraZeros()
+        {
+            string pattern = @"[\+\-]0";
+            
+            AsString = Regex.Replace(AsString, pattern, "");
 
+        }
+        public void RemoveExtraZeroValuedCoefTerms()
+        {
+            string pattern = @"(?<coef>[+-]?0(?:\.0)?)?(?<variable>(?(coef)(([a-z]))?|[a-z]))(?:\^(?<power>\d+))?";
+
+            AsString = Regex.Replace(AsString, pattern, "");
+
+            
+            
+        }
         public string GetEquationSide(EquationSide side)
         {
             string pattern = @"(?<left>.+)=(?<right>.+)";
@@ -49,14 +68,22 @@ namespace Math
 
             if (sideStr != "0")
             {
-                result += "+";
+                if(term.Coef < 0)
+                {
+                    //result += "-";
+                }
+                else
+                {
+                    result += "+";
+                }
+               
             }
             else
             {
                 result = "";
             }
 
-            result += term.ToString();
+            result += term.ToStringSimplified();
 
 
             string left, right;

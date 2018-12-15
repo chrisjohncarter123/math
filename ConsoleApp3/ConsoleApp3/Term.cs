@@ -13,7 +13,7 @@ namespace Math
         public char VariableSymbol { get; set; }
         public int Power { get; set; }
      //   public const string Pattern = @"[\+\-]?((?<coef>[0-9]+)((?<variable>[a-z]+))(\^((?<power>[0-9]))))";
-        public const string Pattern = @"[+-]?(?<coef>\d+(?:\.\d+)?)?(?<variable>(?(coef)(([a-z]))?|[a-z]))(?:\^(?<power>\d+))?";
+        public const string Pattern = @"(?<coef>[+-]?\d+(?:\.\d+)?)?(?<variable>(?(coef)(([a-z]))?|[a-z]))(?:\^(?<power>\d+))?";
         public const int DefaultCoef = 1;
         public const char DefaultVariableSymbol = ' ';
         public const int DefaultPower = 0;
@@ -65,16 +65,24 @@ namespace Math
             Coef = coefResult;
 
             char varResult;
-            if (!char.TryParse(m.Groups["variable"].Value, out varResult))
+            bool tryParseVariable = char.TryParse(m.Groups["variable"].Value, out varResult);
+            if (!tryParseVariable)
             {
                 varResult = DefaultVariableSymbol;
             }
+
             VariableSymbol = varResult;
 
             int powerResult;
-            if (!int.TryParse(m.Groups["power"].Value, out powerResult))
+            bool tryParsePower = int.TryParse(m.Groups["power"].Value, out powerResult);
+            if (!tryParsePower)
             {
                 powerResult = DefaultPower;
+            }
+
+            if(!tryParsePower && tryParseVariable)
+            {
+                powerResult = 1;
             }
             Power = powerResult;
         }
@@ -94,17 +102,33 @@ namespace Math
         public string ToStringSimplified()
         {
             string result = "";
-            if(Coef == 1 && VariableSymbol != DefaultVariableSymbol)
+            if(Coef == 0)
             {
-                result += VariableSymbol;
+                return "0";
             }
-            else
+            if(Coef != 1 && VariableSymbol != DefaultVariableSymbol && Power == 1) 
             {
-                result += string.Format("{0}{1}",Coef,Power);
+                return string.Format("{0}{1}", Coef, VariableSymbol);
             }
-            if(Power != 1)
+            if(Coef != 1 && VariableSymbol != DefaultVariableSymbol && Power != 1)
             {
-                result += string.Format("^{0}",Power);
+                return string.Format("{0}{1}^{2}", Coef, VariableSymbol, Power);
+            }
+            if (Coef == 1 && VariableSymbol != DefaultVariableSymbol && Power != 1)
+            {
+                return string.Format("{0}^{1}", VariableSymbol, Power);
+            }
+            if (Coef == 1 && VariableSymbol != DefaultVariableSymbol && Power == 1)
+            {
+                return string.Format("{0}", VariableSymbol);
+            }
+            if(Coef == 1 && VariableSymbol != DefaultVariableSymbol && Power == 1)
+            {
+                return string.Format("{0}^{1}", VariableSymbol, Power);
+            }
+            if(VariableSymbol == DefaultVariableSymbol)
+            {
+                return string.Format("{0}", Coef);
             }
             return result;
         }

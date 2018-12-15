@@ -81,6 +81,30 @@ namespace Math.Tests
         }
 
         [TestMethod()]
+        public void TermTest6()
+        {
+            string input = "2x";
+
+            Term t = new Term(input);
+
+            Assert.AreEqual(t.Coef, 2, "Coef failed");
+            Assert.AreEqual(t.VariableSymbol, 'x', "VariableSymbol failed");
+            Assert.AreEqual(t.Power, 1, "Power failed");
+        }
+
+        [TestMethod()]
+        public void TermTest7()
+        {
+            string input = "-4";
+
+            Term t = new Term(input);
+
+            Assert.AreEqual(t.Coef, -4, "Coef failed");
+            Assert.AreEqual(t.VariableSymbol, Term.DefaultVariableSymbol, "VariableSymbol failed");
+            Assert.AreEqual(t.Power, Term.DefaultPower, "Power failed");
+        }
+
+        [TestMethod()]
         public void FromMatchTest()
         {
             Match m = Regex.Match("2x^3", Term.Pattern);
@@ -164,7 +188,60 @@ namespace Math.Tests
 
             Assert.AreEqual("2x^3", result);
         }
+        [TestMethod()]
+        public void ToStringSimplifiedTest()
+        {
+            Term t = new Term(1, 'x', 3);
 
+            string result = t.ToStringSimplified();
+
+            Assert.AreEqual("x^3", result);
+        }
+        [TestMethod()]
+        public void ToStringSimplifiedTest2()
+        {
+            Term t = new Term(0, 'x', 3);
+
+            string result = t.ToStringSimplified();
+
+            Assert.AreEqual("0", result);
+        }
+        [TestMethod()]
+        public void ToStringSimplifiedTest3()
+        {
+            Term t = new Term(1, 'x', 1);
+
+            string result = t.ToStringSimplified();
+
+            Assert.AreEqual("x", result);
+        }
+        [TestMethod()]
+        public void ToStringSimplifiedTest4()
+        {
+            Term t = new Term(1, 'x', 2);
+
+            string result = t.ToStringSimplified();
+
+            Assert.AreEqual("x^2", result);
+        }
+        [TestMethod()]
+        public void ToStringSimplifiedTest5()
+        {
+            Term t = new Term(2, 'y', 2);
+
+            string result = t.ToStringSimplified();
+
+            Assert.AreEqual("2y^2", result);
+        }
+        [TestMethod()]
+        public void ToStringSimplifiedTest6()
+        {
+            Term t = new Term(2, Term.DefaultVariableSymbol, Term.DefaultPower);
+
+            string result = t.ToStringSimplified();
+
+            Assert.AreEqual("2", result);
+        }
         [TestMethod()]
         public void GetTermTest()
         {
@@ -177,5 +254,7 @@ namespace Math.Tests
             Assert.AreEqual("3", term.Groups["power"].Value);
 
         }
+
+       
     }
 }

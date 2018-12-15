@@ -19,7 +19,7 @@ namespace Client.Controllers
 
         public IActionResult Solve()
         {
-            Polynomial poly;
+           // Polynomial poly;
 
             return View();
         }
