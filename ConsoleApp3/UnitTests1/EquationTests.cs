@@ -209,5 +209,53 @@ namespace Math.Tests
 
             Assert.AreEqual("32+4=0", equation.AsString);
         }
+
+        [TestMethod()]
+        public void RemoveExtraZeroValuedCoefTermsTest2()
+        {
+            Equation equation = new Equation("0=0");
+
+            equation.RemoveExtraZeroValuedCoefTerms();
+
+            Assert.AreEqual("0=0", equation.AsString);
+        }
+
+        [TestMethod()]
+        public void RemoveExtraZeroValuedCoefTermsTest3()
+        {
+            Equation equation = new Equation("0=0x+0y+2+0");
+
+            equation.RemoveExtraZeroValuedCoefTerms();
+
+            Assert.AreEqual("0=+2", equation.AsString);
+        }
+
+        [TestMethod()]
+        public void TrimLeadingPlusSignOnBothSidesTest()
+        {
+            Equation equation = new Equation("+5x=+2");
+
+            equation.TrimLeadingPlusSignOnBothSides();
+
+            Assert.AreEqual("5x=2", equation.AsString);
+        }
+        [TestMethod()]
+        public void TrimLeadingPlusSignOnBothSidesTest2()
+        {
+            Equation equation = new Equation("5x=+2");
+
+            equation.TrimLeadingPlusSignOnBothSides();
+
+            Assert.AreEqual("5x=2", equation.AsString);
+        }
+        [TestMethod()]
+        public void TrimLeadingPlusSignOnBothSidesTest3()
+        {
+            Equation equation = new Equation("+5x=2");
+
+            equation.TrimLeadingPlusSignOnBothSides();
+
+            Assert.AreEqual("5x=2", equation.AsString);
+        }
     }
 }

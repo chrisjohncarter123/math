@@ -53,15 +53,15 @@ namespace Math
         }
         */
 
-        public static List<Term> OrderTermsByPower(List<Term> terms)
+        public void OrderTermsByPower(EquationSide side)
         {
-            return terms.OrderByDescending(t => t.Power).ToList();
+            AsString = TermListToEquation(Terms(side).OrderByDescending(t => t.Power).ToList()).AsString;
             
         }
-        public static Equation TermListToEquation(List<Term> terms)
+        public static Equation TermListToEquation(List<Term> leftSideTerms)
         {
             Equation e = new Equation("0=0");
-            foreach(Term t in terms)
+            foreach(Term t in leftSideTerms)
             {
                 e.AddTermToOneSide(EquationSide.Left, t);
             }
@@ -142,10 +142,10 @@ namespace Math
             return result;
         }
         
-        public List<Term> AddAllLikeTerms(EquationSide side)
+        public void AddAllLikeTermsOnLeftSide()
         {
             List<Term> result = new List<Term>();
-            List<Term> terms = Terms(side);
+            List<Term> terms = Terms(EquationSide.Left);
             Dictionary<TermType, int> termCoefs = new Dictionary<TermType, int>();
 
             foreach (Term t in terms)
@@ -170,23 +170,27 @@ namespace Math
                 result.Add(new Term(coef, type.VariableSymbol, type.Power));
             }
 
-            return result;
+            AsString = string.Format("{0}={1}", TermListToEquation(result).GetEquationSide(EquationSide.Left), GetEquationSide(EquationSide.Right));
         }
         
 
         public double SolveLinearForX()
         {
+            //input expect to be either ax=0, or ax+b=0
 
             if(GetDegree() == 1)
             {
                 
                 List<Term> terms = Terms(EquationSide.Left);
-                
+                if(terms.Count == 1)
+                {
+                    return 0;
+                }
                 foreach (Term t in terms)
                 {
                     Console.WriteLine(t);
                 }
-                terms = OrderTermsByPower(terms);
+                OrderTermsByPower(EquationSide.Left);
                 Console.WriteLine("---------------------");
                 foreach(Term t in terms)
                 {
@@ -195,6 +199,7 @@ namespace Math
                 //ax+b=0
                 //x=-b/a
                 double a, b, x;
+
                 a = terms[0].Coef;
                 b = terms[1].Coef;
                 x = (-b) / a;
@@ -211,7 +216,7 @@ namespace Math
             if (GetDegree() == 2)
             {
                 List<Term> terms = Terms(EquationSide.Left);
-                terms = OrderTermsByPower(terms);
+                OrderTermsByPower(EquationSide.Left);
 
                 //ax^2+bx+c=0
                 //x=(b+-(sqrt(b^2-4*a*c))/(2*a)
@@ -239,28 +244,41 @@ namespace Math
             }
         }
 
-        
-        public Equation Simplify()
+        public void MoveAllTermsToLeftSide()
         {
-            string left = GetEquationSide(EquationSide.Left);
-            string right = GetEquationSide(EquationSide.Right);
-
             List<Term> rightTerms = Terms(EquationSide.Right);
 
-            foreach(Term t in rightTerms)
+            foreach (Term t in rightTerms)
             {
-                Term minusT = new Term(-t.Coef, t.VariableSymbol, t.Power);
-                AddTermToBothSides(t);
+                if (t.Coef != 0)
+                {
+                    Term minusT = new Term(-t.Coef, t.VariableSymbol, t.Power);
+                    AddTermToBothSides(minusT);
+                }
             }
-
-            List<Term> leftTerms = AddAllLikeTerms(EquationSide.Left);
-            leftTerms = OrderTermsByPower(leftTerms);
-
-            Polynomial e = new Polynomial(leftTerms);
-
-            return new Equation(e.AsString);
+           
         }
-        
+        public void ToSimpliestForm()
+        {
+            MoveAllTermsToLeftSide();
+            AddAllLikeTermsOnLeftSide();
+            OrderTermsByPower(EquationSide.Left);
+            
+        }
+        public double CompleteSolve()
+        {
+            ToSimpliestForm();
+            int degree = GetDegree();
+            if(degree == 1)
+            {
+                return SolveLinearForX();
+            }
+            else if(degree == 2)
+            {
+                return SolveQuadForX();
+            }
+            return 0;
+        }
     }
     struct TermType
     {

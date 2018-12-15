@@ -80,33 +80,22 @@ namespace Math.Tests
         [TestMethod()]
         public void OrderTermsByPowerTest()
         {
-            List<Term> terms = new List<Term>();
-            terms.Add(new Term(2, 'a', 4));
-            terms.Add(new Term(1, 'a', 2));
-            terms.Add(new Term(3, 2));
+            Polynomial p = new Polynomial("2a^4+a^2=0");
 
-            List<Term> result = Polynomial.OrderTermsByPower(terms);
+            p.OrderTermsByPower(EquationSide.Left);
 
-            Assert.AreEqual(3, result.Count, "Failed Count");
-            Assert.AreEqual(4, result[0].Power, "Failed First Term");
-            Assert.AreEqual(2, result[1].Power, "Failed Seccond Term");
-            Assert.AreEqual(2, result[2].Power, "Failed Third Term");
+            Assert.AreEqual("2a^4+a^2=0", p.AsString);
         }
+
 
         [TestMethod()]
         public void OrderTermsByPowerTest2()
         {
-            List<Term> terms = new List<Term>();
-            terms.Add(new Term(2, 'a', 1));
-            terms.Add(new Term(1, 'a', 2));
-            terms.Add(new Term(3, 3));
+            Polynomial p = new Polynomial("2a^4+a^2+a^7=0");
 
-            List<Term> result = Polynomial.OrderTermsByPower(terms);
+            p.OrderTermsByPower(EquationSide.Left);
 
-            Assert.AreEqual(3, result.Count, "Failed Count");
-            Assert.AreEqual(3, result[0].Power, "Failed First Term");
-            Assert.AreEqual(2, result[1].Power, "Failed Seccond Term");
-            Assert.AreEqual(1, result[2].Power, "Failed Third Term");
+            Assert.AreEqual("a^7+2a^4+a^2=0", p.AsString);
         }
 
         [TestMethod()]
@@ -144,11 +133,11 @@ namespace Math.Tests
         [TestMethod()]
         public void SolveLinearForXTest3()
         {
-            Polynomial p = new Polynomial("4+2x=0");
+            Polynomial p = new Polynomial("2x=0");
 
             double result = p.SolveLinearForX();
 
-            Assert.AreEqual(-2, result);
+            Assert.AreEqual(0, result);
         }
 
         [TestMethod()]
@@ -188,31 +177,53 @@ namespace Math.Tests
         }
 
         [TestMethod()]
-        public void AddAllLikeTermsTest()
+        public void AddAllLikeTermsOnLeftSideTest()
         {
             Polynomial p = new Polynomial("2x^2+2x^2+7x+x=0");
 
-            List<Term> result = p.AddAllLikeTerms(EquationSide.Left);
+            p.AddAllLikeTermsOnLeftSide();
 
-            Assert.AreEqual(2, result.Count, "Count");
-            Assert.AreEqual(4, result[0].Coef, "Coef term 0");
-            Assert.AreEqual('x', result[0].VariableSymbol, "VarSymbol term 0");
-            Assert.AreEqual(2, result[0].Power, "Power term 0");
-
-            Assert.AreEqual(8, result[1].Coef, "Coef term 1");
-            Assert.AreEqual('x', result[1].VariableSymbol, "VarSymbol term 1");
-            Assert.AreEqual(1, result[1].Power, "Power term 1");
+            Assert.AreEqual("4x^2+8x=0",p.AsString);
         }
 
         [TestMethod()]
-        public void SimplifyTest()
+        public void ToSimpliestFormTest()
         {
             Polynomial p = new Polynomial("2x^2+12x=0");
 
-            Equation result = p.Simplify();
+            p.ToSimpliestForm();
 
-            Assert.AreEqual("2x^2+12x=0", result.AsString);
+            Assert.AreEqual("2x^2+12x=0", p.AsString);
         }
+
+        [TestMethod()]
+        public void ToSimpliestFormTest2()
+        {
+            Polynomial p = new Polynomial("12x-7=2x^2-87x^5");
+
+            p.ToSimpliestForm();
+
+            Assert.AreEqual("87x^5-2x^2+12x-7=0", p.AsString);
+        }
+        [TestMethod()]
+        public void ToSimpliestFormTest3()
+        {
+            Polynomial p = new Polynomial("2x+2+4=0");
+
+            p.ToSimpliestForm();
+
+            Assert.AreEqual("2x+6=0", p.AsString);
+        }
+        [TestMethod()]
+        public void ToSimpliestFormTest4()
+        {
+            Polynomial p = new Polynomial("2x+2-4=0");
+
+            p.ToSimpliestForm();
+
+            Assert.AreEqual("2x-2=0", p.AsString);
+        }
+
 
         [TestMethod()]
         public void PolynomialTest()
@@ -224,6 +235,73 @@ namespace Math.Tests
             Polynomial p = new Polynomial(t);
 
             Assert.AreEqual("2x^2+x=0", p.AsString);
+        }
+
+        [TestMethod()]
+        public void MoveAllTermsToLeftSideTest()
+        {
+            Polynomial poly = new Polynomial("2x+2+4=4x");
+
+            poly.MoveAllTermsToLeftSide();
+
+            Assert.AreEqual("2x+2+4-4x=4x-4x", poly.AsString);
+        }
+
+        [TestMethod()]
+        public void MoveAllTermsToLeftSideTest2()
+        {
+            Polynomial poly = new Polynomial("2x+2+4=4x-3x+2x-5x^2+1");
+
+            poly.MoveAllTermsToLeftSide();
+
+            Assert.AreEqual("2x+2+4-4x+3x-2x+5x^2-1=4x-3x+2x-5x^2+1-4x+3x-2x+5x^2-1", poly.AsString);
+        }
+
+        [TestMethod()]
+        public void MoveAllTermsToLeftSideTest3()
+        {
+            Polynomial poly = new Polynomial("2x+2+4=0");
+
+            poly.MoveAllTermsToLeftSide();
+
+            Assert.AreEqual("2x+2+4=0", poly.AsString);
+        }
+        [TestMethod()]
+        public void MoveAllTermsToLeftSideTest4()
+        {
+            Polynomial poly = new Polynomial("0=0+5");
+
+            poly.MoveAllTermsToLeftSide();
+
+            Assert.AreEqual("-5=0+5-5", poly.AsString);
+        }
+
+        [TestMethod()]
+        public void CompleteSolveTest()
+        {
+            Polynomial poly = new Polynomial("2x+2+4=4x-3x+2x+1+0+0");
+
+            double result = poly.CompleteSolve();
+
+            Assert.AreEqual(5, result);
+        }
+        [TestMethod()]
+        public void CompleteSolveTest2()
+        {
+            Polynomial poly = new Polynomial("2x+2=0");
+
+            double result = poly.CompleteSolve();
+
+            Assert.AreEqual(-1, result);
+        }
+        [TestMethod()]
+        public void CompleteSolveTest3()
+        {
+            Polynomial poly = new Polynomial("0=20x-10");
+
+            double result = poly.CompleteSolve();
+
+            Assert.AreEqual(.5d, result);
         }
     }
 }

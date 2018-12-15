@@ -51,9 +51,9 @@ namespace Math.Tests
 
             Term t = new Term(input);
 
-            Assert.AreEqual(t.Coef, Term.DefaultCoef, "Coef failed");
+            Assert.AreEqual(t.Coef, 1, "Coef failed");
             Assert.AreEqual(t.VariableSymbol, 'x', "VariableSymbol failed");
-            Assert.AreEqual(t.Power, Term.DefaultPower, "Power failed");
+            Assert.AreEqual(t.Power, 1, "Power failed");
         }
 
         [TestMethod()]
@@ -150,9 +150,9 @@ namespace Math.Tests
 
             result.FromMatch(m);
 
-            Assert.AreEqual(result.Coef, Term.DefaultCoef, "Coef failed");
+            Assert.AreEqual(result.Coef, 1, "Coef failed");
             Assert.AreEqual(result.VariableSymbol, 'a', "VariableSymbol failed");
-            Assert.AreEqual(result.Power, Term.DefaultPower, "Power failed");
+            Assert.AreEqual(result.Power, 1, "Power failed");
         }
         [TestMethod()]
         public void FromMatchTest5()

@@ -37,12 +37,40 @@ namespace Math
         }
         public void RemoveExtraZeroValuedCoefTerms()
         {
+            string left = GetEquationSide(EquationSide.Left);
+            string right = GetEquationSide(EquationSide.Right);
             string pattern = @"(?<coef>[+-]?0(?:\.0)?)?(?<variable>(?(coef)(([a-z]))?|[a-z]))(?:\^(?<power>\d+))?";
 
-            AsString = Regex.Replace(AsString, pattern, "");
+            if (left != "0")
+            {
+                left = Regex.Replace(left, pattern, "");
+            }
+            if (right != "0")
+            {
+                right = Regex.Replace(right, pattern, "");
+            }
+
+
+            AsString = string.Format("{0}={1}", left, right);
 
             
             
+        }
+        public void TrimLeadingPlusSignOnBothSides()
+        {
+            string left = GetEquationSide(EquationSide.Left);
+            string right = GetEquationSide(EquationSide.Right);
+
+            if (left.ToArray()[0].Equals('+'))
+            {
+                Console.WriteLine("Left");
+                left = left.Remove(0, 1);
+            }
+            if (right.ToArray()[0].Equals('+'))
+            {
+                right = right.Remove(0, 1);
+            }
+            AsString = string.Format("{0}={1}", left, right);
         }
         public string GetEquationSide(EquationSide side)
         {
